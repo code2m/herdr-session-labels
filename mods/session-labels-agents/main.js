@@ -347,12 +347,13 @@ export default class Agents extends View {
       // Under a space header the space goes without saying; an automatic tab number says nothing.
       // Without a space header above (priority, pinned) the row names its space.
       const full = byPriority || isPinned;
+      const compactLabels = isSessionAgent(a) && (find(layout(), "sidebar")?.size?.px ?? 268) < 240;
       const name = full ? a.space_name || label(a) : more ?? (/^\d+$/.test(label(a)) ? a.program?.name || label(a) : label(a));
       return h_flex()
         .id(`ag-${a.address}`)
         .tooltip(`${a.space_name || ""} · ${label(a)}`)
         .px(8)
-        .h(30)
+        .h(compactLabels ? 42 : 30)
         .flex_none()
         .rounded(8)
         .items_center()
@@ -372,13 +373,16 @@ export default class Agents extends View {
             this.folded.has(a.address) ? this.folded.delete(a.address) : this.folded.add(a.address);
             cx.notify();
           })).child(pic)))
-        .child(h_flex().flex_1().min_w(0).gap(5).items_center()
+        .when(compactLabels, el => el.child(v_flex().flex_1().min_w(0)
+          .child(div().truncate().text_color(t.foreground).child(sessionAgentLabel(a)))
+          .child(div().truncate().text_size(10.5).text_color(t.dim).child(`${a.space_name || ""} · ${a.tab_name || "Tab"}`))))
+        .when(!compactLabels, el => el.child(h_flex().flex_1().min_w(0).gap(5).items_center()
           .child(div().min_w(0).max_w(full && more ? 120 : 200).truncate().text_color(idle ? t.muted : t.foreground).child(name))
-          .when(full && Boolean(more), el => el.child(div().flex_1().min_w(0).truncate().text_color(t.dim).child(`\u00b7 ${more}`))))
+          .when(full && Boolean(more), el => el.child(div().flex_1().min_w(0).truncate().text_color(t.dim).child(`\u00b7 ${more}`)))))
         .when(Boolean(machine), el => el.child(div().text_size(10).text_color(t.dim).child(machine)))
         .when(subs.length > 0, el => el.child(fold(a, subs)))
         .when(this.hovered === a.address, el => el.child(pin))
-        .when(this.hovered !== a.address && Boolean(when), el => el.child(div().flex_none().text_size(11).text_color(t.dim).child(duration(now - when))))
+        .when(!compactLabels && this.hovered !== a.address && Boolean(when), el => el.child(div().flex_none().text_size(11).text_color(t.dim).child(duration(now - when))))
         .when(duplicate.has(a.address), el => el.child(div().flex_none().text_size(11).text_color(t.muted).child(a.address)))
         .child(this.status(t, a, byPriority && !isPinned));
     };

@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const path = require('node:path');
+const captures = JSON.parse(fs.readFileSync(path.join(__dirname,'title-captures.json'),'utf8'));
 const root = path.resolve(__dirname, '../mods') + '/';
 
 let terminalData = [], data = [], tabs = [], sort = 'priority', width = 268, paneProps = {}, calls = [];
@@ -37,17 +38,23 @@ function texts(n) { return typeof n==='string' ? [n] : n && typeof n==='object' 
 function rows(mod) { return nodes(mod.render({})).filter(n=>/^ag-t/.test(n.attrs.id||'')); }
 function agent(id,app,title,tab='a') {return {address:id,pane:'p'+id,app,title,tab,tab_name:tabs.find(t=>t.id===tab)?.name,space:'s',space_name:'Base',status:'idle',seq:1,program:{key:app,name:app,agent:true}};}
 let passed=0;
-function test(name,fn){fn();passed++;console.log('PASS '+name);}
+function test(name,fn){
+ terminalData=[];sort='priority';width=268;paneProps={};calls=[];
+ tabs=[{id:'a',name:'Renamed',named:true},{id:'b',name:'Other',named:true}];
+ data=[agent('t1','claude-code','Same'),agent('t2','claude-code','Same','b')];
+ fixed.changed={};fixed.held=null;original.changed={};original.held=null;
+ fn();passed++;console.log('PASS '+name);
+}
 tabs=[{id:'a',name:'QA',named:true},{id:'b',name:'Other',named:true}];
 const fixed=load('session-labels-agents'), original=load('agents');
 test('reproduce original identical labels with two distinct Codex sessions',()=>{
- data=[agent('t1','codex','Alpha | tmp'),agent('t2','codex','Beta | tmp')];
+ tabs[0].name='QA';data=[agent('t1','codex','Alpha | tmp'),agent('t2','codex','Beta | tmp')];
  assert.deepEqual(texts(rows(original)[0]),texts(rows(original)[1]));
  assert.match(texts(rows(fixed)[0]).join(' '),/QA · Alpha/);
  assert.match(texts(rows(fixed)[1]).join(' '),/QA · Beta/);
 });
 test('live session rename updates existing view',()=>{data[0].title='Μετονομασία 🤖 | tmp';assert.match(texts(rows(fixed)[0]).join(' '),/Μετονομασία 🤖/);});
-test('live tab rename keeps the session',()=>{tabs[0].name='Renamed';data.forEach(a=>a.tab_name='Renamed');assert.match(texts(rows(fixed)[0]).join(' '),/Renamed · Μετονομασία/);});
+test('live tab rename keeps the session',()=>{data=[agent('t1','codex','Μετονομασία | tmp')];tabs[0].name='Renamed';data.forEach(a=>a.tab_name='Renamed');assert.match(texts(rows(fixed)[0]).join(' '),/Renamed · Μετονομασία/);});
 test('identical session names in different tabs remain distinct',()=>{
  data=[agent('t1','claude-code','Same'),agent('t2','claude-code','Same','b')];
  assert.notEqual(rows(fixed)[0].attrs.tooltip,rows(fixed)[1].attrs.tooltip);
@@ -89,10 +96,10 @@ test('kept sub-agent appears once and pinned remains reachable',()=>{
  terminalData=[];
 });
 test('real Codex braille title is stable across frames',()=>{
- for(const glyph of ['⠋','⠙','⠹']) {data=[agent('t1','codex',glyph+' name | folder')];assert.equal(rows(fixed)[0].attrs.tooltip,'Base · Renamed · name');}
+ for(const glyph of ['⠋','⠙','⠹']) {data=[agent('t1','codex',captures.codex.title.replace(/^./u,glyph))];assert.equal(rows(fixed)[0].attrs.tooltip,'Base · Renamed · name');}
 });
 test('observed Claude OSC status prefixes normalize and generic titles fall back',()=>{
- for(const title of ['✳ Labels QA','◐ Labels QA']) {data=[agent('t1','claude-code',title)];assert.equal(rows(fixed)[0].attrs.tooltip,'Base · Renamed · Labels QA');}
+ for(const title of captures.claude.titles_in_order.filter(t=>t.endsWith('Labels QA'))) {data=[agent('t1','claude-code',title)];assert.equal(rows(fixed)[0].attrs.tooltip,'Base · Renamed · Labels QA');}
  data=[agent('t1','claude-code','✳ Claude Code')];assert.equal(rows(fixed)[0].attrs.tooltip,'Base · Renamed · Claude · t1');
 });
 test('Codex names resembling status prefixes are preserved',()=>{
@@ -111,5 +118,6 @@ test('duplicate sidebar IDs are nonshrinking and pane headers distinguish sessio
  assert.ok(texts(pane.render({})).includes('Review · t1'));
  paneProps={pane:'pt2'};assert.ok(texts(pane.render({})).includes('Review · t2'));
 });
+test('narrow sidebar puts the session on its own line',()=>{width=180;data=[agent('t1','claude-code','Review')];const row=rows(fixed)[0];assert.equal(row.attrs.h,42);assert.ok(nodes(row).some(n=>n.kids.includes('Review')));assert.ok(nodes(row).some(n=>n.kids.includes('Base · Renamed')));});
 test('helper copies stay identical',()=>assert.equal(fs.readFileSync(root+'session-labels-agents/session-title.js','utf8'),fs.readFileSync(root+'session-labels-pane/session-title.js','utf8')));
 console.log(`${passed} regression tests passed (actual mod render with mocked GPUI builders; native layout tested separately).`);

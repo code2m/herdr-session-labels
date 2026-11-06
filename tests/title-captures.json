@@ -1,6 +1,6 @@
 {
   "captured_on": "2026-11-07",
-  "method": "Codex: hc get on a real running terminal. Claude: raw OSC 0 output from an interactive safe-mode CLI session and /rename, with no model prompt.",
+  "method": "Terminal titles captured from the terminal API and interactive CLI output during a local session rename.",
   "codex": {
     "cli_version": "0.166.0",
     "state": "working",
@@ -9,9 +9,13 @@
   },
   "claude": {
     "cli_version": "2.1.319",
-    "model_display": "Sonnet 5.5",
     "osc_command": 0,
-    "titles_in_order": ["✳ Claude Code", "◐ Claude Code", "◐ Labels QA", "✳ Labels QA"],
+    "titles_in_order": [
+      "✳ Claude Code",
+      "◐ Claude Code",
+      "◐ Labels QA",
+      "✳ Labels QA"
+    ],
     "trigger": "/rename Labels QA"
   },
   "limits": "No capture of Claude model-generation or blocked states in this run. Codex bracketed status cases remain synthetic regression inputs based on earlier observed formatting. OpenClaw examples in this package are protocol fixtures, not a bundled adapter verification."

@@ -1,0 +1,9 @@
+{
+  "name": "herdr-session-labels",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tab context and live session labels for Herdr Desktop",
+  "license": "Apache-2.0",
+  "engines": { "node": ">=18" },
+  "scripts": { "test": "node tests/names.cjs" }
+}

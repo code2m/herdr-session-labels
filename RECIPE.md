@@ -8,7 +8,7 @@ Keep tab context alongside Codex, Claude Code and OpenClaw session names in Herd
 
 A two-column layout based on Herdr's main layout. The left sidebar is initially 268px wide (44–480px bounds), with brand, spaces, agents and footer. The work column has the tab bar, active tab, optional Files/Changes panel and status footer. Pane frames have 30px always-visible headers and 8px gaps. Use theme colors and native text styling.
 
-Agent rows retain the shipped 30px height. In Priority view they show space followed by tab and session. Grouped view puts the space above the rows. Duplicate full labels in a space gain a separate, nonshrinking terminal-address suffix. The full sidebar label is a tooltip. Pane headers show the session without repeating the tab, adding an address when names in that tab match.
+Agent rows are 30px tall at normal widths. At 160–239px, supported agents use 42px rows with the session on the first line, space/tab on the second and no elapsed time. In Priority view they show space followed by tab and session. Grouped view puts the space above the rows. Duplicate full labels in a space gain a separate, nonshrinking terminal-address suffix. The full sidebar label is a tooltip. Pane headers show the session without repeating the tab, adding an address when names in that tab match.
 
 ## How it behaves
 

@@ -9,6 +9,9 @@ Herdr Desktop 0.1.13 shipped layout/mods. The sidebar additionally includes
 the kept-sub-agent filtering logic present at upstream commit
 e5ba294ac187aa12d6f7e72ebfb59eb4ebeabd65.
 
+The cloned_from metadata records the base release (0.1.13), not a claim
+that the modified files are identical to that release.
+
 Modifications: session-title parsing, tab/session labels, collision suffixes,
 identity tooltips, custom pane header names and custom asset paths.
 tests/baseline/agents.js is an unmodified 0.1.13 sidebar test fixture.

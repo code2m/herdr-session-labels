@@ -1,0 +1,3 @@
+Command: herdr-app check <package>/mods/session-labels-agents
+check passed: <package>/mods/session-labels-agents
+Exit code: 0

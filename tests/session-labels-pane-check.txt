@@ -1,0 +1,3 @@
+Command: herdr-app check <package>/mods/session-labels-pane
+check passed: <package>/mods/session-labels-pane
+Exit code: 0

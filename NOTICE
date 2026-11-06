@@ -1,0 +1,16 @@
+Herdr Session Labels
+
+Derived from herdrdev/herdr-app, licensed under Apache License 2.0.
+Source: https://github.com/herdrdev/herdr-app
+
+layouts/session-labels.json, mods/session-labels-agents/main.js,
+mods/session-labels-pane/main.js and pane SVG assets are derived from the
+Herdr Desktop 0.1.13 shipped layout/mods. The sidebar additionally includes
+the kept-sub-agent filtering logic present at upstream commit
+e5ba294ac187aa12d6f7e72ebfb59eb4ebeabd65.
+
+Modifications: session-title parsing, tab/session labels, collision suffixes,
+identity tooltips, custom pane header names and custom asset paths.
+tests/baseline/agents.js is an unmodified 0.1.13 sidebar test fixture.
+
+No endorsement by or affiliation with Herdr is implied.

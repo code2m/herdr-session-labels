@@ -1,0 +1,18 @@
+{
+  "command": "herdr-app status",
+  "stdout": {
+    "zoom": 1.0,
+    "font_size": 14.0,
+    "ui_font_size": 13.0,
+    "space": "sp0131a93bd278eb4fbfd9d3e40e6ab976",
+    "tab": "tbfde7be8f0910e3a9d69c597ee7f6947e",
+    "focused_pane": "pfd9f12e3c0867536f8f49d7664bc7685",
+    "layout": "session-labels",
+    "agent": "t2",
+    "floats": {},
+    "overlays": [],
+    "errors": []
+  },
+  "app_version": "herdr-app 0.1.13",
+  "note": "Isolated home/core; protocol fixtures, no model calls."
+}

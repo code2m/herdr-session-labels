@@ -1,0 +1,26 @@
+Validated 2026-11-07
+
+23 render regression tests passed: node tests/names.cjs
+Native Herdr 0.1.13 check passed for both custom mods.
+Native screenshots captured in an isolated app home and dedicated core,
+using synthetic OSC title/status reports. No model calls.
+Native status: tests/native-status.json; errors: [].
+
+preview.png: equal Codex/Claude session names in one named tab, with
+terminal IDs making sidebar rows distinct.
+tests/live-renamed.png: changed tab and session name, Greek/emoji, working.
+tests/live-narrow.png: narrow sidebar, documented truncation behavior.
+
+Not tested: native Linux/Windows, long-term updates, restart persistence,
+new CLI title formats, remote machines. The inherited upstream renderer
+tests use mock element builders; they are not native layout tests.
+
+Upstream master e5ba294ac187aa12d6f7e72ebfb59eb4ebeabd65:
+16 existing agents tests passed; two added evidence cases confirmed that
+equal session titles in different shared tabs omit tab context. The custom
+layout supplies an alternative naming policy; no upstream PR is implied.
+
+Title-format verification: actual Codex/Claude title captures are in tests/title-captures.json. Parser edge cases and duplicate-pane labels now have regression tests. tests/session-labels-*-check.txt are captured check outputs (package path redacted); tests/native-status.json contains the complete scratch status response. Native subagent keyboard navigation remains unverified.
+
+All four published screenshots were regenerated after the final code changes on 2026-11-07. tests/live-narrow-duplicates.png confirms visible t1/t2 suffixes at 180px sidebar width.
+Baseline verified byte-identical to installed shipped agents mod; SHA256: 27d9dd06fea9562f62f0924922aafcadd64623391cb1ada4d47d754e91b0f44b
